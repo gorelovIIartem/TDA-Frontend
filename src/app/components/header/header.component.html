@@ -1,0 +1,121 @@
+<nav class="navbar navbar-dark bg-dark navbar-expand-lg">
+    <div class="container-fluid px-0">
+      <div class="row w-100">
+        <div class="col-2">
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation" (click)="isShown = !isShown" >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </div>
+  
+        <div class="col-10">
+          <div class="collapse justify-content-end navbar-collapse" [ngClass]="{ 'show': isShown }" id="navbarTogglerDemo03">
+            <ul class="navbar-nav mt-2 mt-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" href="#" [routerLink]="['']" >Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#" (click)="isShown = false" >About</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#" *ngIf="isLogined()"  [routerLink]="['/tours']"  >Tours</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" *ngIf="isLogined()"  [routerLink]="['/admin']" style="cursor: pointer;">Admin page</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" *ngIf="isLogined()"  (click)="goToProfile()" style="cursor: pointer;">Profile</a>
+              </li>
+              <li class="nav-item" *ngIf="!isLogined()">
+                <a class="nav-link" href="#" (click)="openModal(SignUpModal)" >Sign-up</a>
+              </li>
+              <li class="nav-item" *ngIf="!isLogined()">
+                <a class="nav-link" href="#" (click)="openModal(SignInModal)" >Login</a>
+              </li>
+              <li class="nav-item" *ngIf="isLogined()">
+                <a class="nav-link" href="#" (click)="logOut()" >Log out</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <ng-template #SignUpModal >
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Sign-up</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form class="col-sm-12" #userRegistrationForm="ngForm" (ngSubmit)="OnSingUpFormSubmit(userRegistrationForm)">
+        <div class="form-group">
+          <label data-error="Requored field!">User Name</label>
+          <input type="text" class="form-control" checkspaces name="UserName" maxlength="64" #UserName="ngModel" [(ngModel)]="user.UserName" required deletespaces>
+          <div class="validation-error" *ngIf="UserName.invalid && UserName.touched">Username is required</div>
+        </div>
+        <div class="form-group">
+          <label data-error="Requored field!">Full Name</label>
+          <input type="text" class="form-control" name="FullName" #FullName="ngModel" maxlength="64" [(ngModel)]="user.FullName" required checkspaces>
+          <div class="validation-error" *ngIf="FullName.invalid && FullName.touched">Full name is required</div>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" class="form-control" name="Password" #Password="ngModel" [(ngModel)]="user.Password" required
+            minlength="6">
+          <div *ngIf="!Password.valid && (userRegistrationForm.submitted || Password.touched)" class="validation-error">
+            <div *ngIf="Password.errors.required">Password is required. </div>
+            <div *ngIf="Password.errors.minlength">Password must contain at least 6 or more characters.</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Confirm Password</label>
+          <input type="password" class="form-control" name="ConfirmPassword" #ConfirmPassword="ngModel"
+            [(ngModel)]="user.ConfirmPassword" required pattern="{{ Password.value }}">
+          <div *ngIf="!ConfirmPassword.valid && (userRegistrationForm.submitted || ConfirmPassword.touched)">
+            <div class="validation-error" *ngIf="ConfirmPassword.errors.required">Confirm password is required</div>
+            <div class="validation-error" *ngIf="ConfirmPassword.errors.pattern">Password & Confirm Password does not match.
+            </div>
+          </div>
+        </div>
+        <div class="form-group"> 
+          <label>Email</label>
+          <input type="email" class="form-control" name="Email" #Email="ngModel" [(ngModel)]="user.Email" required
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+            <div *ngIf="Email.invalid && (Email.dirty || Email.touched)" class="validation-error">
+              <div *ngIf="Email.errors.required">
+                Email is required.
+              </div>
+              <div *ngIf="Email.errors.pattern">
+                Enter the correct email (for example : bull@gmail.com).
+              </div>
+            </div>
+        </div>
+        <button [disabled]="!userRegistrationForm.valid" type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  </ng-template>
+
+  <ng-template #SignInModal>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Sign-in</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div *ngIf="isLoginError" class="text-danger">
+        <i class="material-icons">error</i> Incorrect username or password
+      </div>
+      <form #loginForm="ngForm" class="col-sm-12" (ngSubmit)="OnLoginFormSubmit(UserName.value, Password.value)">
+        <div class="form-group">
+          <input type="text" class="form-control" #UserName ngModel name="UserName" placeholder="UserName" required>
+        </div>
+        <div class="form-group">
+          <input type="password" class="form-control" #Password ngModel name="Password" placeholder="Password" required>
+        </div>
+        <button [disabled]="!loginForm.valid" type="submit" class="btn btn-primary" data-dismiss="modal">Login</button>
+      </form>
+    </div>
+  </ng-template>

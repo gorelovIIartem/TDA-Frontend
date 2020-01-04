@@ -1,0 +1,32 @@
+<app-header></app-header>
+<div class="card mb-3">
+    <div class="row no-gutters">
+      <div class="col-md-4">
+        <img src="..." class="card-img" alt="...">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <ul class="list-group">
+            <li class="list-group-item">Name : {{tour.name}}</li>
+            <li class="list-group-item">City : {{tour.city}}</li>
+            <li class="list-group-item">Location : {{tour.location}}</li>
+            <li class="list-group-item">Price : {{tour.price}}</li>
+            <li class="list-group-item">Places count : {{tour.placesCount}}</li>
+            <li class="list-group-item">Description : {{tour.description}}</li>
+            <li class="list-group-item">Date : {{tour.date | date: 'dd/MM/yyyy'}}</li>
+            <li class="list-group-item">
+                <button type="button" class="btn btn-primary" (click)="openModal(confirmPurchase)">Buy ticket</button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #confirmPurchase>
+    <div class="modal-body text-center">
+        <p>Do you want to confirm?</p>
+        <button type="button" class="btn btn-default" (click)="addTicket()" >Yes</button>
+        <button type="button" class="btn btn-primary" (click)="modalRef.hide();" >No</button>
+      </div>
+  </ng-template>

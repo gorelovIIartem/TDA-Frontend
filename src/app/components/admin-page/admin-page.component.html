@@ -1,0 +1,101 @@
+<app-header></app-header>
+<div>
+    <tabset>
+        <tab heading="Tours" id="tab1">
+            <div style="text-align: center;">
+                <button type="button" class="btn btn-primary" (click)="openModal(addTourModal)"
+                    style="margin-top: 10px; margin-bottom: 10px;">Add tour</button>
+            </div>
+            <table class="table table-hover" >
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">City</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">PlacesCount</th>
+                        <th scope="col">Date</th>
+                    </tr>
+                </thead>
+                <tbody >
+                    <tr *ngFor="let tour of tours">
+                        <td>{{tour.name}}</td>
+                        <td>{{tour.city}}</td>
+                        <td>{{tour.location}}</td>
+                        <td>{{tour.price}}</td>
+                        <td>{{tour.placesCount}}</td>
+                        <td>{{tour.date| date: 'dd/MM/yyyy'}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </tab>
+        <tab heading="Users">Basic content 1</tab>
+    </tabset>
+</div>
+
+<ng-template #addTourModal>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Add tour</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form #userUpdateForm="ngForm" (ngSubmit)="onAddTourFormSubmit(userUpdateForm)">
+            <div class="form-group row">
+                <label for="Name" class="col-sm-2 col-form-label">Name</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="Name" [(ngModel)]="newTour.Name" #Name="ngModel"
+                        name="Name">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="Date" class="col-sm-2 col-form-label">Date</label>
+                <div class="col-xs-12 col-12 col-md-4 form-group">
+                    <input type="text" class="form-control" #dp="bsDatepicker" bsDatepicker [bsValue]="bsValue"
+                        [(ngModel)]="birhtday" #Date="ngModel" name="Date" class="form-control" id="Date">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="City" class="col-sm-2 col-form-label">City</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="City" [(ngModel)]="newTour.City" #City="ngModel"
+                        name="City">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="Location" class="col-sm-2 col-form-label">Location</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="Location" [(ngModel)]="newTour.Location"
+                        #Location="ngModel" name="Location">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="Price" class="col-sm-2 col-form-label">Price</label>
+                <div class="col-sm-10">
+                    <input type="number" class="form-control" id="Price" [(ngModel)]="newTour.Price" #Price="ngModel"
+                        name="Price">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="PlacesCount" class="col-sm-2 col-form-label">Places count</label>
+                <div class="col-sm-10">
+                    <input type="number" class="form-control" id="PlacesCount" [(ngModel)]="newTour.PlacesCount"
+                        #PlacesCount="ngModel" name="PlacesCount">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="Description" class="col-sm-2 col-form-label">Description</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="Description" [(ngModel)]="newTour.Description"
+                        #Description="ngModel" name="Description">
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" (click)="decline()">Cancel</button>
+                <button type="button" class="btn btn-primary" type="submit">Save</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
